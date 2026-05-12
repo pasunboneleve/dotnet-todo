@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Angular build output
+dist/
+.angular/
+.cache/
+
+# .NET build output
+bin/
+obj/
+TestResults/
+coverage/
+*.trx
+
+# Editor/local workflow
+.dir-locals.el
+.direnv/
+*.swp
+*~
+\#*\#
+.\#*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment/local config
+.env
+.env.*
+!.env.example
+
+# Agent/local workflow artefacts
+.codex
+.codex/
+.claude/
+.gemini/
+.roborev/
+.beads/
+.agent/
+.agents/
+.ai/
+tmp/
+scratch/
