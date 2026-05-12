@@ -17,6 +17,7 @@ coverage/
 # Editor/local workflow
 .dir-locals.el
 .direnv/
+.vscode/
 *.swp
 *~
 \#*\#
@@ -49,3 +50,8 @@ pnpm-debug.log*
 .ai/
 tmp/
 scratch/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
