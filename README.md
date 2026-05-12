@@ -63,13 +63,17 @@ CHROME_BIN=/usr/bin/chromium-browser npm test -- --watch=false --browsers=Chrome
 
 ## Optional contributor workflow
 
-This repository includes `devloop.toml` for contributors who have the local `devloop` tool installed:
+This repository includes `devloop.toml` for contributors who have the local [`devloop`](https://github.com/pasunboneleve/devloop) tool installed:
 
 ```sh
 devloop run
 ```
 
 `devloop` is not required to run or review the project.
+
+## License
+
+This project is licensed under the MIT License. The optional `devloop` workflow is included to show one way to supervise the backend, frontend, and test watcher during development.
 
 ## Current constraints
 
