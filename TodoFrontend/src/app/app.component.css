@@ -8,6 +8,7 @@
 .app-shell {
   align-items: flex-start;
   background: #f4f7f9;
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   min-height: 100vh;

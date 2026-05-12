@@ -20,7 +20,7 @@ command = ["dotnet", "watch", "--project", "TodoApi", "run", "--no-launch-profil
 cwd = "."
 autostart = false
 restart = "on_failure"
-env = { ASPNETCORE_ENVIRONMENT = "Development", ASPNETCORE_URLS = "http://127.0.0.1:5040", DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER = "1" }
+env = { ASPNETCORE_ENVIRONMENT = "Development", ASPNETCORE_URLS = "http://127.0.0.1:5040", DOTNET_CLI_HOME = "/tmp/dotnet-cli", DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER = "1" }
 output = { inherit = true, body_style = "plain" }
 
 [process.api.readiness]
@@ -65,7 +65,7 @@ steps = [
   { action = "start_process", process = "web" },
   { action = "wait_for_process", process = "web" },
   { action = "start_process", process = "frontend_tests" },
-  { action = "log", message = "API: http://localhost:5040/swagger\nWeb: http://localhost:4200\nTests: Karma ChromeHeadless watch", style = "boxed" },
+  { action = "log", message = "API: http://localhost:5040/api/todos\nWeb: http://localhost:4200\nTests: Karma ChromeHeadless watch", style = "boxed" },
 ]
 
 [workflow.source_changed]
