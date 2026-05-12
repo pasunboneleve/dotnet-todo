@@ -41,6 +41,7 @@ pnpm-debug.log*
 # Agent/local workflow artefacts
 .codex
 .codex/
+.devloop/
 .claude/
 .gemini/
 .roborev/

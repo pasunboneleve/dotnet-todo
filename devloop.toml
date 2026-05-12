@@ -1,0 +1,74 @@
+root = "."
+debounce_ms = 300
+state_file = ".devloop/state.json"
+startup_workflows = ["startup"]
+
+[watch.source]
+paths = [
+  "TodoApi/",
+  "TodoFrontend/src/",
+  "TodoFrontend/angular.json",
+  "TodoFrontend/package.json",
+  "TodoFrontend/tsconfig.json",
+  "TodoFrontend/tsconfig.app.json",
+  "TodoFrontend/tsconfig.spec.json",
+]
+workflow = "source_changed"
+
+[process.api]
+command = ["dotnet", "watch", "--project", "TodoApi", "run", "--no-launch-profile"]
+cwd = "."
+autostart = false
+restart = "on_failure"
+env = { ASPNETCORE_ENVIRONMENT = "Development", ASPNETCORE_URLS = "http://127.0.0.1:5040", DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER = "1" }
+output = { inherit = true, body_style = "plain" }
+
+[process.api.readiness]
+kind = "http"
+url = "http://127.0.0.1:5040/weatherforecast"
+interval_ms = 500
+timeout_ms = 30000
+
+[process.web]
+command = ["npm", "--prefix", "TodoFrontend", "start", "--", "--host", "127.0.0.1"]
+cwd = "."
+autostart = false
+restart = "on_failure"
+output = { inherit = true, body_style = "plain" }
+
+[process.web.readiness]
+kind = "http"
+url = "http://127.0.0.1:4200/"
+interval_ms = 500
+timeout_ms = 30000
+
+[process.frontend_tests]
+command = [
+  "npm",
+  "--prefix",
+  "TodoFrontend",
+  "test",
+  "--",
+  "--watch=true",
+  "--browsers=ChromeHeadless",
+]
+cwd = "."
+autostart = false
+restart = "on_failure"
+env = { CHROME_BIN = "/usr/bin/chromium-browser" }
+output = { inherit = true, body_style = "plain" }
+
+[workflow.startup]
+steps = [
+  { action = "start_process", process = "api" },
+  { action = "wait_for_process", process = "api" },
+  { action = "start_process", process = "web" },
+  { action = "wait_for_process", process = "web" },
+  { action = "start_process", process = "frontend_tests" },
+  { action = "log", message = "API: http://localhost:5040/swagger\nWeb: http://localhost:4200\nTests: Karma ChromeHeadless watch", style = "boxed" },
+]
+
+[workflow.source_changed]
+steps = [
+  { action = "log", message = "Source changed; dotnet watch, ng serve, and Karma own the rebuild/retest cycle.", style = "plain" },
+]
