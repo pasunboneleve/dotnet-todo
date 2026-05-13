@@ -16,21 +16,20 @@ paths = [
 workflow = "source_changed"
 
 [process.api]
-command = ["dotnet", "watch", "--project", "TodoApi", "run", "--no-launch-profile"]
+command = ["./scripts/api-watch.sh"]
 cwd = "."
 autostart = false
 restart = "on_failure"
-env = { ASPNETCORE_ENVIRONMENT = "Development", ASPNETCORE_URLS = "http://127.0.0.1:5040", DOTNET_CLI_HOME = "/tmp/dotnet-cli", DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER = "1" }
 output = { inherit = true, body_style = "plain" }
 
 [process.api.readiness]
 kind = "http"
-url = "http://127.0.0.1:5040/api/todos"
+url = "$TODO_API_URL/api/todos"
 interval_ms = 500
 timeout_ms = 30000
 
 [process.web]
-command = ["npm", "--prefix", "TodoFrontend", "start", "--", "--host", "127.0.0.1"]
+command = ["./scripts/web.sh"]
 cwd = "."
 autostart = false
 restart = "on_failure"
@@ -38,24 +37,15 @@ output = { inherit = true, body_style = "plain" }
 
 [process.web.readiness]
 kind = "http"
-url = "http://127.0.0.1:4200/"
+url = "$TODO_WEB_URL/"
 interval_ms = 500
 timeout_ms = 30000
 
 [process.frontend_tests]
-command = [
-  "npm",
-  "--prefix",
-  "TodoFrontend",
-  "test",
-  "--",
-  "--watch=true",
-  "--browsers=ChromeHeadless",
-]
+command = ["./scripts/frontend-test-watch.sh"]
 cwd = "."
 autostart = false
 restart = "on_failure"
-env = { CHROME_BIN = "/usr/bin/chromium-browser" }
 output = { inherit = true, body_style = "plain" }
 
 [workflow.startup]
@@ -65,7 +55,7 @@ steps = [
   { action = "start_process", process = "web" },
   { action = "wait_for_process", process = "web" },
   { action = "start_process", process = "frontend_tests" },
-  { action = "log", message = "API: http://localhost:5040/api/todos\nWeb: http://localhost:4200\nTests: Karma ChromeHeadless watch", style = "boxed" },
+  { action = "log", message = "API: $TODO_API_URL/api/todos\nWeb: $TODO_WEB_URL\nTests: Karma ChromeHeadless watch", style = "boxed" },
 ]
 
 [workflow.source_changed]

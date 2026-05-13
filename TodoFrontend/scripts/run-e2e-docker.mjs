@@ -2,13 +2,17 @@ import { spawnSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { loadDotEnv } from './env.mjs';
+
 const frontendDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+loadDotEnv(frontendDir);
 const shouldOpen = process.argv.includes('--open');
 
 const image = 'mcr.microsoft.com/playwright:v1.60.0-noble';
-const baseUrl = process.platform === 'linux'
+const defaultBaseUrl = process.platform === 'linux'
   ? 'http://127.0.0.1:4200'
   : 'http://host.docker.internal:4200';
+const baseUrl = process.env.TODO_WEB_URL ?? defaultBaseUrl;
 
 const dockerArgs = [
   'run',

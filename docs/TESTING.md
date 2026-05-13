@@ -75,6 +75,26 @@ npm --workspace TodoFrontend run e2e:docker:open
 
 The Docker wrapper chooses host networking on Linux and `host.docker.internal` on Docker Desktop platforms.
 
+## Local Configuration
+
+The local scripts read `.env` when it exists and otherwise use committed defaults from `.env.example`:
+
+```sh
+TODO_API_URL=http://127.0.0.1:5040
+TODO_WEB_URL=http://127.0.0.1:4200
+ASPNETCORE_ENVIRONMENT=Development
+DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER=1
+CHROME_BIN=/usr/bin/chromium-browser
+```
+
+For a local override:
+
+```sh
+cp .env.example .env
+```
+
+`direnv` is optional. If you use it, the committed `.envrc` loads `.env` into your shell after you run `direnv allow`.
+
 ## Continuous Integration
 
 GitHub Actions runs the same validation on `ubuntu-latest` for pushes and pull requests:
@@ -100,7 +120,7 @@ npm test
 Optional local workflow:
 
 ```sh
-devloop run
+./scripts/devloop.sh run
 ```
 
 `devloop` is optional. It starts the API, Angular dev server, and frontend test watcher together for contributors who have it installed.

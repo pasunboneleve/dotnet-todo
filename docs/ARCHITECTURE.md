@@ -26,7 +26,7 @@ flowchart LR
 
 The Angular app owns browser state, rendering, form input, loading state, newest-first display ordering, focus after successful add, and user-visible errors. It calls relative API URLs such as `/api/todos`; it does not know the backend port.
 
-The Angular development server owns the local proxy. During development, it forwards `/api/*` requests from `localhost:4200` to the backend at `localhost:5040`.
+The Angular development server owns the local proxy. During development, it forwards `/api/*` requests from the frontend URL to the backend URL. The default values are listed in `.env.example`, and `scripts/web.sh` writes the Angular proxy config before starting the dev server.
 
 The ASP.NET Core API owns the HTTP contract:
 

@@ -6,6 +6,7 @@ node_modules/
 dist/
 .angular/
 .cache/
+TodoFrontend/.generated/
 playwright-report/
 .playwright-report/
 test-results/
