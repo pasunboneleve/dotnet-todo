@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit, ViewChild, afterNextRender, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 
@@ -14,6 +14,10 @@ import { TodoItem } from './todos/todo.model';
 })
 export class AppComponent implements OnInit {
   private readonly todoApi = inject(TodoApiService);
+  private readonly injector = inject(Injector);
+
+  @ViewChild('newTodoInput')
+  private newTodoInput?: ElementRef<HTMLInputElement>;
 
   todos: TodoItem[] = [];
   newTitle = '';
@@ -53,6 +57,7 @@ export class AppComponent implements OnInit {
         next: todo => {
           this.todos = [...this.todos, todo];
           this.newTitle = '';
+          afterNextRender(() => this.newTodoInput?.nativeElement.focus(), { injector: this.injector });
         },
         error: () => this.errorMessage = 'Could not add the todo. Try again.',
       });

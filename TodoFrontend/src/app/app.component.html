@@ -9,13 +9,13 @@
       <label for="new-todo">New item</label>
       <div class="form-row">
         <input
+          #newTodoInput
           id="new-todo"
           name="new-todo"
           type="text"
           [(ngModel)]="newTitle"
           placeholder="Add something to do"
           autocomplete="off"
-          [disabled]="isSaving"
         />
         <button type="submit" [disabled]="!newTitle.trim() || isSaving">
           {{ isSaving ? 'Adding...' : 'Add' }}
