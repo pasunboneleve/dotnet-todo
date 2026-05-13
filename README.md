@@ -2,7 +2,18 @@
 
 [![CI](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/ci.yml/badge.svg)](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/ci.yml)
 
-A small TODO list application built with [Angular](https://angular.dev/) 21 and [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) on [.NET](https://dotnet.microsoft.com/en-us/download) 10. The frontend calls a backend Web API, and the backend stores TODO items in memory for the lifetime of the API process.
+This is a small [Angular](https://angular.dev/) + [ASP.NET
+Core](https://dotnet.microsoft.com/en-us/apps/aspnet) Web API
+implementation of a TODO list exercise.
+
+The application intentionally keeps the product scope small:
+
+- view TODOs
+- add TODOs
+- delete TODOs
+- store TODOs in backend memory only
+
+The surrounding project includes tests, CI, and brief architecture notes to show how I approach code quality, testability, and maintainable delivery.
 
 ## Architecture at a glance
 
