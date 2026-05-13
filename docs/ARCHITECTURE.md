@@ -24,13 +24,13 @@ flowchart LR
 
 ## Boundaries
 
-The Angular app owns browser state, rendering, form input, loading state, and user-visible errors. It calls relative API URLs such as `/api/todos`; it does not know the backend port.
+The Angular app owns browser state, rendering, form input, loading state, newest-first display ordering, focus after successful add, and user-visible errors. It calls relative API URLs such as `/api/todos`; it does not know the backend port.
 
 The Angular development server owns the local proxy. During development, it forwards `/api/*` requests from `localhost:4200` to the backend at `localhost:5040`.
 
 The ASP.NET Core API owns the HTTP contract:
 
-- `GET /api/todos` returns the current list.
+- `GET /api/todos` returns the current process-local list.
 - `POST /api/todos` creates an item from a non-empty title.
 - `DELETE /api/todos/{id}` removes an existing item.
 
@@ -48,8 +48,11 @@ User submits form
 → ASP.NET endpoint validates the request body
 → InMemoryTodoStore assigns an ID and stores the item
 → API returns the created item
-→ Angular app appends the item to the rendered list
+→ Angular app prepends the item to the rendered list
+→ Angular app clears and refocuses the input after rendering
 ```
+
+When loading TODOs from the API, the Angular component sorts the returned items newest-first by `createdAt`, then by `id` as a deterministic tie-breaker. Successful creates are already newest, so the component prepends the returned item instead of reversing the existing list.
 
 Deleting a TODO follows the same boundary in reverse: the component sends `DELETE /api/todos/{id}`, the backend removes the item if present, and the component removes it from the displayed list after a successful response.
 
