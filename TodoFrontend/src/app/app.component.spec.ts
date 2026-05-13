@@ -15,6 +15,11 @@ describe('AppComponent', () => {
     title: 'Read the brief',
     createdAt: '2026-05-12T00:00:00Z',
   };
+  const newerTodo: TodoItem = {
+    id: 2,
+    title: 'Write tests',
+    createdAt: '2026-05-12T00:01:00Z',
+  };
 
   function addTodoWithMockedServer(disableInputDuringSave: boolean): {
     activeDuringSave: boolean;
@@ -92,20 +97,26 @@ describe('AppComponent', () => {
     expect(compiled.textContent).toContain('Read the brief');
   });
 
+  it('renders newer todos before older todos', () => {
+    todoApi.list.and.returnValue(of([existingTodo, newerTodo]));
+
+    fixture.detectChanges();
+
+    const renderedTodos = fixture.debugElement
+      .queryAll(By.css('.todo-list li span'))
+      .map(item => item.nativeElement.textContent.trim());
+    expect(renderedTodos).toEqual(['Write tests', 'Read the brief']);
+  });
+
   it('adds a todo with trimmed input', () => {
-    const createdTodo: TodoItem = {
-      id: 2,
-      title: 'Write tests',
-      createdAt: '2026-05-12T00:01:00Z',
-    };
-    todoApi.create.and.returnValue(of(createdTodo));
+    todoApi.create.and.returnValue(of(newerTodo));
     fixture.detectChanges();
 
     fixture.componentInstance.newTitle = '  Write tests  ';
     fixture.componentInstance.addTodo();
 
     expect(todoApi.create).toHaveBeenCalledWith('Write tests');
-    expect(fixture.componentInstance.todos).toEqual([existingTodo, createdTodo]);
+    expect(fixture.componentInstance.todos).toEqual([newerTodo, existingTodo]);
     expect(fixture.componentInstance.newTitle).toBe('');
   });
 

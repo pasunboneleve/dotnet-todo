@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     this.todoApi.list()
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: todos => this.todos = todos,
+        next: todos => this.todos = this.newestFirst(todos),
         error: () => this.errorMessage = 'Could not load todos. Check that the API is running.',
       });
   }
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
       .pipe(finalize(() => this.isSaving = false))
       .subscribe({
         next: todo => {
-          this.todos = [...this.todos, todo];
+          this.todos = [todo, ...this.todos];
           this.newTitle = '';
           afterNextRender(() => this.newTodoInput?.nativeElement.focus(), { injector: this.injector });
         },
@@ -77,5 +77,12 @@ export class AppComponent implements OnInit {
         next: () => this.todos = this.todos.filter(item => item.id !== todo.id),
         error: () => this.errorMessage = 'Could not delete the todo. Try again.',
       });
+  }
+
+  private newestFirst(todos: TodoItem[]): TodoItem[] {
+    return [...todos].sort((left, right) => {
+      const createdAtDifference = Date.parse(right.createdAt) - Date.parse(left.createdAt);
+      return createdAtDifference || right.id - left.id;
+    });
   }
 }
