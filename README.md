@@ -8,6 +8,7 @@ A small TODO list application built with Angular 21 and ASP.NET Core on .NET 10.
 - `TodoApi/` contains the ASP.NET Core Minimal API.
 - `TodoApi.Tests/` contains backend integration tests.
 - `docs/ARCHITECTURE.md` explains the runtime boundaries and data flow.
+- `docs/TESTING.md` explains the test layers and validation commands.
 
 ## Prerequisites
 
