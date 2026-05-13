@@ -44,14 +44,8 @@ jobs:
       - name: Install frontend packages
         run: npm ci
 
-      - name: Install Playwright browser
-        run: npm --workspace TodoFrontend exec playwright -- install --with-deps chromium
-
       - name: Build frontend
         run: npm --workspace TodoFrontend run build
 
       - name: Test frontend
         run: npm --workspace TodoFrontend test -- --watch=false --browsers=ChromeHeadless
-
-      - name: Test full stack smoke flow
-        run: npm --workspace TodoFrontend run e2e

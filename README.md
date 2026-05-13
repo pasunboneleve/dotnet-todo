@@ -1,6 +1,7 @@
 # TODO App
 
 [![CI](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/ci.yml/badge.svg)](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/ci.yml)
+[![Playwright](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/playwright.yml/badge.svg)](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/playwright.yml)
 
 A small TODO list application built with [Angular](https://angular.dev/) 21 and [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet) on [.NET](https://dotnet.microsoft.com/en-us/download) 10. The frontend calls a backend Web API, and the backend stores TODO items in memory for the lifetime of the API process.
 

@@ -97,10 +97,11 @@ cp .env.example .env
 
 ## Continuous Integration
 
-GitHub Actions runs the same validation on `ubuntu-latest` for pushes and pull requests:
+GitHub Actions runs hosted validation for pushes and pull requests:
 
 - Backend job: `dotnet restore Todo.slnx`, then `dotnet test Todo.slnx --no-restore`.
-- Frontend job: `npm ci`, `npx playwright install --with-deps chromium`, `npm run build`, `npm test -- --watch=false --browsers=ChromeHeadless`, then `npm run e2e`.
+- Frontend job: `npm ci`, `npm --workspace TodoFrontend run build`, then `npm --workspace TodoFrontend test -- --watch=false --browsers=ChromeHeadless`.
+- Playwright smoke job: runs in `mcr.microsoft.com/playwright:v1.60.0-noble`, installs packages with `npm ci`, then runs `npm --workspace TodoFrontend run e2e`.
 
 ## Development Watch Mode
 
