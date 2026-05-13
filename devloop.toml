@@ -7,13 +7,23 @@ startup_workflows = ["startup"]
 paths = [
   "TodoApi/",
   "TodoFrontend/src/",
+]
+workflow = "source_changed"
+
+[watch.frontend_config]
+paths = [
+  "package.json",
+  "package-lock.json",
+  "node_modules/.package-lock.json",
   "TodoFrontend/angular.json",
   "TodoFrontend/package.json",
+  "TodoFrontend/package-lock.json",
   "TodoFrontend/tsconfig.json",
   "TodoFrontend/tsconfig.app.json",
   "TodoFrontend/tsconfig.spec.json",
+  "TodoFrontend/scripts/",
 ]
-workflow = "source_changed"
+workflow = "frontend_config_changed"
 
 [process.api]
 command = ["./scripts/api-watch.sh"]
@@ -61,4 +71,12 @@ steps = [
 [workflow.source_changed]
 steps = [
   { action = "log", message = "Source changed; dotnet watch, ng serve, and Karma own the rebuild/retest cycle.", style = "plain" },
+]
+
+[workflow.frontend_config_changed]
+steps = [
+  { action = "log", message = "Frontend dependencies or build config changed; restarting Angular dev server and Karma watcher.", style = "plain" },
+  { action = "restart_process", process = "web" },
+  { action = "wait_for_process", process = "web" },
+  { action = "restart_process", process = "frontend_tests" },
 ]
