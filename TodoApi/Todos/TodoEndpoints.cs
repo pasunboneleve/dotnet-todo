@@ -10,7 +10,9 @@ public static class TodoEndpoints
 
         group.MapPost("/", (CreateTodoRequest request, InMemoryTodoStore store) =>
         {
-            if (string.IsNullOrWhiteSpace(request.Title))
+            var title = request.Title?.Trim();
+
+            if (string.IsNullOrWhiteSpace(title))
             {
                 return Results.ValidationProblem(new Dictionary<string, string[]>
                 {
@@ -18,7 +20,15 @@ public static class TodoEndpoints
                 });
             }
 
-            var todo = store.Add(request.Title);
+            if (title.Length > TodoConstraints.MaxTitleLength)
+            {
+                return Results.ValidationProblem(new Dictionary<string, string[]>
+                {
+                    ["title"] = [$"Title must be {TodoConstraints.MaxTitleLength} characters or fewer."],
+                });
+            }
+
+            var todo = store.Add(title);
             return Results.Created($"/api/todos/{todo.Id}", todo);
         });
 

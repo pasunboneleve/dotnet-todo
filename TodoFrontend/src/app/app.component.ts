@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
 
   todos: TodoItem[] = [];
   newTitle = '';
+  readonly todoTitleMaxLength = 200;
   isLoading = false;
   isSaving = false;
   errorMessage = '';

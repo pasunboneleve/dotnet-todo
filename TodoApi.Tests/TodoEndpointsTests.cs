@@ -48,6 +48,33 @@ public sealed class TodoEndpointsTests
     }
 
     [Fact]
+    public async Task PostTodo_accepts_title_at_length_limit()
+    {
+        await using var app = new WebApplicationFactory<Program>();
+        using var client = app.CreateClient();
+        var title = new string('a', 200);
+
+        var response = await client.PostAsJsonAsync("/api/todos", new { title });
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var todo = await response.Content.ReadFromJsonAsync<TodoResponse>();
+        Assert.NotNull(todo);
+        Assert.Equal(title, todo.Title);
+    }
+
+    [Fact]
+    public async Task PostTodo_rejects_title_over_length_limit()
+    {
+        await using var app = new WebApplicationFactory<Program>();
+        using var client = app.CreateClient();
+        var title = new string('a', 201);
+
+        var response = await client.PostAsJsonAsync("/api/todos", new { title });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task DeleteTodo_removes_existing_item()
     {
         await using var app = new WebApplicationFactory<Program>();

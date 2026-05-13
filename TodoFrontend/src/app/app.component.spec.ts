@@ -142,6 +142,13 @@ describe('AppComponent', () => {
     expect(todoApi.create).not.toHaveBeenCalled();
   });
 
+  it('limits todo title input length', () => {
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#new-todo')).nativeElement as HTMLInputElement;
+    expect(input.maxLength).toBe(200);
+  });
+
   it('deletes a todo', () => {
     todoApi.delete.and.returnValue(of(undefined));
     fixture.detectChanges();

@@ -16,6 +16,7 @@
           [(ngModel)]="newTitle"
           placeholder="Add something to do"
           autocomplete="off"
+          [attr.maxlength]="todoTitleMaxLength"
         />
         <button type="submit" [disabled]="!newTitle.trim() || isSaving">
           {{ isSaving ? 'Adding...' : 'Add' }}
