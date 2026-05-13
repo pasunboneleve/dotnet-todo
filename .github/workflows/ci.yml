@@ -30,10 +30,6 @@ jobs:
     name: Frontend
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: TodoFrontend
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -49,13 +45,13 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
+        run: npm --workspace TodoFrontend exec playwright -- install --with-deps chromium
 
       - name: Build frontend
-        run: npm run build
+        run: npm --workspace TodoFrontend run build
 
       - name: Test frontend
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+        run: npm --workspace TodoFrontend test -- --watch=false --browsers=ChromeHeadless
 
       - name: Test full stack smoke flow
-        run: npm run e2e
+        run: npm --workspace TodoFrontend run e2e
