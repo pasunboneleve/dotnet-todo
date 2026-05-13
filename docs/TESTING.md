@@ -10,7 +10,7 @@ This project tests the backend HTTP contract and the frontend browser-facing beh
 
 - `GET /api/todos` returns the current list.
 - `POST /api/todos` trims and creates a TODO.
-- Empty titles are rejected.
+- Empty and oversized titles are rejected.
 - `DELETE /api/todos/{id}` removes existing items.
 - Deleting an unknown item returns `404 Not Found`.
 
@@ -19,7 +19,11 @@ This project tests the backend HTTP contract and the frontend browser-facing beh
 Angular tests cover two boundaries:
 
 - `TodoApiService` tests use `HttpTestingController` to verify relative `/api/todos` requests without a live backend.
-- `AppComponent` tests mock `TodoApiService` and verify browser-facing behavior: loading, rendering, adding, deleting, errors, focus after add, and newest-first ordering.
+- `AppComponent` tests mock `TodoApiService` and verify browser-facing behavior: loading, rendering, adding, deleting, errors, focus after add, title length, and newest-first ordering.
+
+### Full Stack Smoke Test
+
+The Playwright smoke test starts the real .NET API and the real Angular dev server, then drives the app through a browser. It verifies one user path: load the empty list, add a TODO, see it rendered, delete it, and return to the empty state.
 
 ## Running Tests
 
@@ -49,12 +53,34 @@ cd TodoFrontend
 npm run build
 ```
 
+Full stack smoke test in CI or an environment with Playwright browsers installed:
+
+```sh
+cd TodoFrontend
+npx playwright install chromium
+npm run e2e
+```
+
+Full stack smoke test with Docker, after the backend and frontend are running:
+
+```sh
+npm --workspace TodoFrontend run e2e:docker
+```
+
+To write the HTML report into `TodoFrontend/.playwright-report/` and open it in your browser:
+
+```sh
+npm --workspace TodoFrontend run e2e:docker:open
+```
+
+The Docker wrapper chooses host networking on Linux and `host.docker.internal` on Docker Desktop platforms.
+
 ## Continuous Integration
 
 GitHub Actions runs the same validation on `ubuntu-latest` for pushes and pull requests:
 
 - Backend job: `dotnet restore Todo.slnx`, then `dotnet test Todo.slnx --no-restore`.
-- Frontend job: `npm ci`, `npm run build`, then `npm test -- --watch=false --browsers=ChromeHeadless`.
+- Frontend job: `npm ci`, `npx playwright install --with-deps chromium`, `npm run build`, `npm test -- --watch=false --browsers=ChromeHeadless`, then `npm run e2e`.
 
 ## Development Watch Mode
 
@@ -81,7 +107,7 @@ devloop run
 
 ## What Is Not Covered
 
-- No browser E2E suite yet.
+- No broad browser E2E suite beyond the single full-stack smoke path.
 - No persistence tests, because there is no database.
 - No authentication or authorization tests.
 - No deployment or production-hosting tests.

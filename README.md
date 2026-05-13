@@ -64,6 +64,18 @@ On Linux, if Karma cannot find Chrome or Chromium, set `CHROME_BIN`:
 CHROME_BIN=/usr/bin/chromium-browser npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
+Full-stack smoke test with Docker, after the backend and frontend are running:
+
+```sh
+npm --workspace TodoFrontend run e2e:docker
+```
+
+To write the HTML report into `TodoFrontend/.playwright-report/` and open it in your browser:
+
+```sh
+npm --workspace TodoFrontend run e2e:docker:open
+```
+
 ## Optional contributor workflow
 
 This repository includes `devloop.toml` for contributors who have the local [`devloop`](https://github.com/pasunboneleve/devloop) tool installed:

@@ -48,8 +48,14 @@ jobs:
       - name: Install frontend packages
         run: npm ci
 
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
       - name: Build frontend
         run: npm run build
 
       - name: Test frontend
         run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Test full stack smoke flow
+        run: npm run e2e
