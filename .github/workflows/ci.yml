@@ -27,25 +27,44 @@ jobs:
         run: dotnet test Todo.slnx --no-restore
 
   frontend:
-    name: Frontend
+    name: Frontend and smoke
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: TodoFrontend/package-lock.json
+          cache-dependency-path: package-lock.json
+
+      - name: Restore backend packages for smoke test
+        run: dotnet restore Todo.slnx
 
       - name: Install frontend packages
         run: npm ci
+
+      - name: Configure Karma browser
+        working-directory: TodoFrontend
+        run: |
+          chromium_path="$(node -e 'console.log(require("playwright").chromium.executablePath())')"
+          printf 'CHROME_BIN=%s\n' "$chromium_path" >> "$GITHUB_ENV"
 
       - name: Build frontend
         run: npm --workspace TodoFrontend run build
 
       - name: Test frontend
-        run: npm --workspace TodoFrontend test -- --watch=false --browsers=ChromeHeadless
+        run: npm --workspace TodoFrontend test -- --watch=false --browsers=ChromeHeadlessNoSandbox
+
+      - name: Test full stack smoke flow
+        run: npm --workspace TodoFrontend run e2e
