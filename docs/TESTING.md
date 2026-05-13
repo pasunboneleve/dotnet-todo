@@ -49,6 +49,13 @@ cd TodoFrontend
 npm run build
 ```
 
+## Continuous Integration
+
+GitHub Actions runs the same validation on `ubuntu-latest` for pushes and pull requests:
+
+- Backend job: `dotnet restore Todo.slnx`, then `dotnet test Todo.slnx --no-restore`.
+- Frontend job: `npm ci`, `npm run build`, then `npm test -- --watch=false --browsers=ChromeHeadless`.
+
 ## Development Watch Mode
 
 Backend:

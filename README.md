@@ -1,5 +1,7 @@
 # TODO App
 
+[![CI](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/ci.yml/badge.svg)](https://github.com/pasunboneleve/dotnet-todo/actions/workflows/ci.yml)
+
 A small TODO list application built with Angular 21 and ASP.NET Core on .NET 10. The frontend calls a backend Web API, and the backend stores TODO items in memory for the lifetime of the API process.
 
 ## Architecture at a glance
